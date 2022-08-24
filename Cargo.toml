@@ -1,2 +1,2 @@
 [workspace]
-members = ["adder", "minigrep"]
+members = ["adder", "minigrep", "crypto_cli"]
