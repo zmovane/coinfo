@@ -1,4 +1,5 @@
-use crypto_cli::{Binance, Exchange};
+use exchanges::{Binance, Exchange};
+mod exchanges;
 
 fn main() {
     match Binance::get_instrument("BTCUSDT") {

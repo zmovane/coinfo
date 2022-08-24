@@ -1,7 +1,7 @@
 use once_cell::sync::Lazy;
 use std::{env, error::Error};
-pub mod binance;
-
+mod binance;
+pub use self::binance::Binance;
 #[derive(Debug)]
 pub struct Instrument {
     exName: String,
