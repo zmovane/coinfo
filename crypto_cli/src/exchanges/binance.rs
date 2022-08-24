@@ -2,27 +2,28 @@ use super::*;
 use serde::Deserialize;
 
 #[derive(Deserialize)]
+#[serde(rename_all = "camelCase")]
 struct Ticker {
     symbol: String,
-    priceChange: String,
-    priceChangePercent: String,
-    weightedAvgPrice: String,
-    prevClosePrice: String,
-    lastPrice: String,
-    lastQty: String,
-    bidPrice: String,
-    bidQty: String,
-    askPrice: String,
-    askQty: String,
-    openPrice: String,
-    highPrice: String,
-    lowPrice: String,
+    price_change: String,
+    price_change_percent: String,
+    weighted_avg_price: String,
+    prev_close_price: String,
+    last_price: String,
+    last_qty: String,
+    bid_price: String,
+    bid_qty: String,
+    ask_price: String,
+    ask_qty: String,
+    open_price: String,
+    high_price: String,
+    low_price: String,
     volume: String,
-    quoteVolume: String,
-    openTime: u64,
-    closeTime: u64,
-    firstId: u128,
-    lastId: u128,
+    quote_volume: String,
+    open_time: u64,
+    close_time: u64,
+    first_id: u128,
+    last_id: u128,
     count: u32,
 }
 
@@ -31,8 +32,8 @@ impl Ticker {
         Instrument {
             exName: "Binance".to_string(),
             symbol: self.symbol.clone(),
-            price: self.lastPrice.parse::<f32>().unwrap_or(0f32),
-            price_24h_change_percent: self.priceChangePercent.parse::<f32>().unwrap_or(0f32),
+            price: self.last_price.parse::<f32>().unwrap_or(0f32),
+            price_24h_change_percent: self.price_change_percent.parse::<f32>().unwrap_or(0f32),
         }
     }
 }
