@@ -1,5 +1,5 @@
 use once_cell::sync::Lazy;
-use std::error::Error;
+use std::{env, error::Error};
 pub mod binance;
 
 #[derive(Debug)]
@@ -16,9 +16,11 @@ pub trait Exchange {
 }
 
 pub static HTTP_CLIENT: Lazy<reqwest::blocking::Client> = Lazy::new(|| {
-    reqwest::blocking::Client::builder()
-        .proxy(reqwest::Proxy::https("http://127.0.0.1:7890").ok().unwrap())
-        .build()
-        .ok()
-        .unwrap()
+    let builder = reqwest::blocking::Client::builder();
+    let builder = if let Ok(url) = env::var("HTTP_PROXY") {
+        builder.proxy(reqwest::Proxy::https(url).ok().unwrap())
+    } else {
+        builder
+    };
+    builder.build().ok().unwrap()
 });
