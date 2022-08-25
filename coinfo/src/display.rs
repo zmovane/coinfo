@@ -1,4 +1,4 @@
-use crate::exchanges::Instrument;
+use crate::exchanges::{Instrument, QUOTE};
 use prettytable::{row, Table};
 
 pub fn display_instruments(instruments: Vec<Instrument>) {
@@ -6,9 +6,9 @@ pub fn display_instruments(instruments: Vec<Instrument>) {
     table.set_titles(row![
         "Symbol",
         "Exchange",
-        "Price",
+        format!("Price ({})", QUOTE.to_string()),
         "PriceChange%",
-        "Volume"
+        format!("24H Volume ({})", QUOTE.to_string())
     ]);
     for instr in instruments.iter() {
         table.add_row(row![
