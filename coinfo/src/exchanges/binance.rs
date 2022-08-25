@@ -40,8 +40,14 @@ impl Ticker {
 
 pub struct Binance;
 
+impl SymbolFormatter for Binance {
+    fn format_symbol(&self, base: String) -> String {
+        format!("{}{}", base, QUOTE.to_string())
+    }
+}
+
 impl Exchange for Binance {
-    fn get_instrument(symbol: &str) -> Result<Instrument, Box<dyn std::error::Error>> {
+    fn get_instrument(&self, symbol: String) -> Result<Instrument, Box<dyn std::error::Error>> {
         let ticker = HTTP_CLIENT
             .get("https://api.binance.com/api/v3/ticker/24hr")
             .query(&[("symbol", symbol)])
@@ -51,7 +57,10 @@ impl Exchange for Binance {
         Ok(ticker.to_instrument())
     }
 
-    fn get_instruments(symbols: Vec<&str>) -> Result<Vec<Instrument>, Box<dyn std::error::Error>> {
+    fn get_instruments(
+        &self,
+        symbols: Vec<String>,
+    ) -> Result<Vec<Instrument>, Box<dyn std::error::Error>> {
         let tickers = HTTP_CLIENT
             .get("https://api.binance.com/api/v3/ticker/24hr")
             .query(&[("symbols", format!("{:?}", symbols).replace(" ", ""))])

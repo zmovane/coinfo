@@ -11,9 +11,16 @@ pub struct Instrument {
 }
 
 pub trait Exchange {
-    fn get_instrument(symbol: &str) -> Result<Instrument, Box<dyn Error>>;
-    fn get_instruments(symbols: Vec<&str>) -> Result<Vec<Instrument>, Box<dyn Error>>;
+    fn get_instrument(&self, symbol: String) -> Result<Instrument, Box<dyn Error>>;
+    fn get_instruments(&self, symbols: Vec<String>) -> Result<Vec<Instrument>, Box<dyn Error>>;
 }
+
+pub trait SymbolFormatter {
+    fn format_symbol(&self, base: String) -> String;
+}
+
+pub static QUOTE: Lazy<String> =
+    Lazy::new(|| env::var("COINFO_QUOTE").unwrap_or(String::from("USDT")));
 
 pub static HTTP_CLIENT: Lazy<reqwest::blocking::Client> = Lazy::new(|| {
     let builder = reqwest::blocking::Client::builder();
