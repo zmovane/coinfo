@@ -13,7 +13,7 @@ pub fn display_instruments(instruments: Vec<Instrument>) {
     for instr in instruments.iter() {
         table.add_row(row![
             instr.symbol,
-            instr.exName,
+            instr.ex_name,
             instr.price,
             instr.price_24h_change_percent,
             instr.volume

@@ -30,7 +30,7 @@ struct Ticker {
 impl Ticker {
     fn to_instrument(&self) -> Instrument {
         Instrument {
-            exName: "Binance".to_string(),
+            ex_name: "Binance".to_string(),
             symbol: self.symbol.clone(),
             price: self.last_price.parse::<f32>().unwrap_or(0f32),
             price_24h_change_percent: self.price_change_percent.parse::<f32>().unwrap_or(0f32),
