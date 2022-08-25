@@ -4,10 +4,11 @@ mod binance;
 pub use self::binance::Binance;
 #[derive(Debug)]
 pub struct Instrument {
-    exName: String,
-    symbol: String,
-    price: f32,
-    price_24h_change_percent: f32,
+    pub exName: String,
+    pub symbol: String,
+    pub price: f32,
+    pub price_24h_change_percent: f32,
+    pub volume: f64,
 }
 
 pub trait Exchange {

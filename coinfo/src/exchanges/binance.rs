@@ -34,6 +34,7 @@ impl Ticker {
             symbol: self.symbol.clone(),
             price: self.last_price.parse::<f32>().unwrap_or(0f32),
             price_24h_change_percent: self.price_change_percent.parse::<f32>().unwrap_or(0f32),
+            volume: self.quote_volume.parse::<f64>().unwrap_or(0f64),
         }
     }
 }

@@ -1,8 +1,10 @@
 use clap::Parser;
 use command::Commands;
+use display::display_instruments;
 use exchanges::{Binance, Exchange, Instrument, SymbolFormatter};
 use std::error::Error;
 mod command;
+mod display;
 mod exchanges;
 
 fn main() {
@@ -12,11 +14,9 @@ fn main() {
             let currencies: Vec<&str> = currencies.split(",").map(|i| i.trim()).collect();
             match get_instruments(Binance, currencies) {
                 Ok(data) => {
-                    println!("{:?}", data);
+                    display_instruments(data);
                 }
-                Err(e) => {
-                    println!("{:?}", e);
-                }
+                Err(e) => eprintln!("{}", e),
             }
         }
     }
