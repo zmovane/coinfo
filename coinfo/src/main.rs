@@ -2,7 +2,7 @@ use aggregators::{Coingecko, CommunityInfo};
 use clap::Parser;
 use command::Commands;
 use display::{display_community_info, display_instruments};
-use exchanges::{Binance, Exchange, Instrument, SymbolFormatter};
+use exchanges::{Binance, Exchange, Instrument, SymbolFormatter, OKX};
 use std::error::Error;
 mod aggregators;
 mod command;
@@ -14,7 +14,7 @@ fn main() {
     match args.command {
         Commands::Price { currencies } => {
             let currencies: Vec<&str> = currencies.split(",").map(|i| i.trim()).collect();
-            match get_instruments(Binance, currencies) {
+            match get_instruments(OKX, currencies) {
                 Ok(data) => {
                     display_instruments(data);
                 }
