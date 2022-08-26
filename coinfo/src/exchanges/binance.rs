@@ -28,8 +28,8 @@ struct Ticker {
 }
 
 impl Ticker {
-    fn to_instrument(&self) -> Instrument {
-        Instrument {
+    fn converted(&self) -> super::Ticker {
+        super::Ticker {
             ex_name: "Binance".to_string(),
             symbol: self.symbol.clone(),
             price: self.last_price.parse::<f32>().unwrap_or(0f32),
@@ -48,26 +48,26 @@ impl SymbolFormatter for Binance {
 }
 
 impl Exchange for Binance {
-    fn get_instrument(&self, symbol: String) -> Result<Instrument, Box<dyn std::error::Error>> {
+    fn get_ticker(&self, symbol: String) -> Result<super::Ticker, Box<dyn std::error::Error>> {
         let ticker = HTTP_CLIENT
             .get("https://api.binance.com/api/v3/ticker/24hr")
             .query(&[("symbol", symbol)])
             .send()?
             .json::<Ticker>()?;
 
-        Ok(ticker.to_instrument())
+        Ok(ticker.converted())
     }
 
-    fn get_instruments(
+    fn get_tickers(
         &self,
         symbols: Vec<String>,
-    ) -> Result<Vec<Instrument>, Box<dyn std::error::Error>> {
+    ) -> Result<Vec<super::Ticker>, Box<dyn std::error::Error>> {
         let tickers = HTTP_CLIENT
             .get("https://api.binance.com/api/v3/ticker/24hr")
             .query(&[("symbols", format!("{:?}", symbols).replace(" ", ""))])
             .send()?
             .json::<Vec<Ticker>>()?;
 
-        Ok(tickers.iter().map(|t| t.to_instrument()).collect())
+        Ok(tickers.iter().map(|t| t.converted()).collect())
     }
 }

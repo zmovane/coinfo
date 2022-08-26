@@ -11,7 +11,7 @@ pub struct Cli {
 #[derive(Debug, Subcommand)]
 pub enum Commands {
     #[clap(arg_required_else_help = true)]
-    Price { currencies: String },
+    Ticker { currencies: String },
     #[clap(arg_required_else_help = true)]
-    Info { currency: String },
+    Community { currency: String },
 }

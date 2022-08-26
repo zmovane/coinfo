@@ -31,10 +31,10 @@ struct Ticker {
 }
 
 impl Ticker {
-    fn to_instrument(&self) -> Instrument {
+    fn converted(&self) -> super::Ticker {
         let open = self.open24h.parse::<f32>().unwrap();
         let price_change = (self.last.parse::<f32>().unwrap() - open) / open * 100.0;
-        Instrument {
+        super::Ticker {
             ex_name: "OKX".to_string(),
             symbol: self.inst_id.clone(),
             price: self.last.parse::<f32>().unwrap_or(0f32),
@@ -53,24 +53,24 @@ impl SymbolFormatter for OKX {
 }
 
 impl Exchange for OKX {
-    fn get_instrument(&self, symbol: String) -> Result<Instrument, Box<dyn std::error::Error>> {
+    fn get_ticker(&self, symbol: String) -> Result<super::Ticker, Box<dyn std::error::Error>> {
         let response = HTTP_CLIENT
             .get("https://www.okx.com/api/v5/market/ticker")
             .query(&[("instId", symbol)])
             .send()?
             .json::<Response<Ticker>>()?;
-        Ok(response.data.get(0).unwrap().to_instrument())
+        Ok(response.data.get(0).unwrap().converted())
     }
 
-    fn get_instruments(
+    fn get_tickers(
         &self,
         symbols: Vec<String>,
-    ) -> Result<Vec<Instrument>, Box<dyn std::error::Error>> {
-        let tickers: Vec<Instrument> = symbols
+    ) -> Result<Vec<super::Ticker>, Box<dyn std::error::Error>> {
+        let tickers: Vec<super::Ticker> = symbols
             .iter()
-            .map(|s| self.get_instrument(s.to_string()))
-            .filter(|instr| if let Ok(_) = instr { true } else { false })
-            .map(|instr| instr.unwrap())
+            .map(|s| self.get_ticker(s.to_string()))
+            .filter(|ticker| if let Ok(_) = ticker { true } else { false })
+            .map(|ticker| ticker.unwrap())
             .collect();
 
         Ok(tickers)

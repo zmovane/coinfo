@@ -5,7 +5,7 @@ mod okx;
 pub use self::binance::Binance;
 pub use self::okx::OKX;
 #[derive(Debug)]
-pub struct Instrument {
+pub struct Ticker {
     pub ex_name: String,
     pub symbol: String,
     pub price: f32,
@@ -14,8 +14,8 @@ pub struct Instrument {
 }
 
 pub trait Exchange {
-    fn get_instrument(&self, symbol: String) -> Result<Instrument, Box<dyn Error>>;
-    fn get_instruments(&self, symbols: Vec<String>) -> Result<Vec<Instrument>, Box<dyn Error>>;
+    fn get_ticker(&self, symbol: String) -> Result<Ticker, Box<dyn Error>>;
+    fn get_tickers(&self, symbols: Vec<String>) -> Result<Vec<Ticker>, Box<dyn Error>>;
 }
 
 pub trait SymbolFormatter {

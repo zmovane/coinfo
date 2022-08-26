@@ -1,8 +1,8 @@
 use aggregators::{Coingecko, CommunityInfo};
 use clap::Parser;
 use command::Commands;
-use display::{display_community_info, display_instruments};
-use exchanges::{Binance, Exchange, Instrument, SymbolFormatter, OKX};
+use display::{display_community_info, display_tickers};
+use exchanges::{Binance, Exchange, SymbolFormatter, Ticker, OKX};
 use std::error::Error;
 mod aggregators;
 mod command;
@@ -12,16 +12,16 @@ mod exchanges;
 fn main() {
     let args = command::Cli::parse();
     match args.command {
-        Commands::Price { currencies } => {
+        Commands::Ticker { currencies } => {
             let currencies: Vec<&str> = currencies.split(",").map(|i| i.trim()).collect();
-            match get_instruments(OKX, currencies) {
+            match get_tickers(OKX, currencies) {
                 Ok(data) => {
-                    display_instruments(data);
+                    display_tickers(data);
                 }
                 Err(e) => eprintln!("{}", e),
             }
         }
-        Commands::Info { currency } => match get_community_info(Coingecko, currency) {
+        Commands::Community { currency } => match get_community_info(Coingecko, currency) {
             Ok(data) => {
                 display_community_info(data);
             }
@@ -37,13 +37,13 @@ fn get_community_info<T: aggregators::Aggregator>(
     aggregator.get_community_info(currency)
 }
 
-fn get_instruments<T: Exchange + SymbolFormatter>(
+fn get_tickers<T: Exchange + SymbolFormatter>(
     ex: T,
     currencies: Vec<&str>,
-) -> Result<Vec<Instrument>, Box<dyn Error>> {
+) -> Result<Vec<Ticker>, Box<dyn Error>> {
     let symbols: Vec<String> = currencies
         .iter()
         .map(|&i| ex.format_symbol(i.to_string()))
         .collect();
-    ex.get_instruments(symbols)
+    ex.get_tickers(symbols)
 }

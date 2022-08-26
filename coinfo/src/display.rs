@@ -1,10 +1,10 @@
 use crate::{
     aggregators::CommunityInfo,
-    exchanges::{Instrument, QUOTE},
+    exchanges::{Ticker, QUOTE},
 };
 use comfy_table::{ContentArrangement, Table};
 
-pub fn display_instruments(instruments: Vec<Instrument>) {
+pub fn display_tickers(tickers: Vec<Ticker>) {
     let mut table = Table::new();
     table.set_header(vec![
         "Symbol",
@@ -13,13 +13,13 @@ pub fn display_instruments(instruments: Vec<Instrument>) {
         "PriceChange%",
         &format!("24H Volume ({})", QUOTE.to_string()),
     ]);
-    for instr in instruments.iter() {
+    for ticker in tickers.iter() {
         table.add_row(vec![
-            instr.symbol.clone(),
-            instr.ex_name.clone(),
-            instr.price.to_string(),
-            instr.price_24h_change_percent.to_string(),
-            instr.volume.to_string(),
+            ticker.symbol.clone(),
+            ticker.ex_name.clone(),
+            ticker.price.to_string(),
+            ticker.price_24h_change_percent.to_string(),
+            ticker.volume.to_string(),
         ]);
     }
     println!("{table}");
