@@ -3,7 +3,7 @@ use once_cell::sync::Lazy;
 
 #[derive(Debug, Parser)]
 #[clap(name = "coinfo")]
-#[clap(about = "A CLI tool for everything about cryptocurrencies")]
+#[clap(about = "A CLI tool that provides useful information about cryptocurrencies")]
 pub struct Cli {
     #[clap(subcommand)]
     pub command: Commands,
