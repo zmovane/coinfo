@@ -14,7 +14,7 @@ struct Coin {
     name: String,
     api_symbol: String,
     symbol: String,
-    market_cap_rank: u32,
+    market_cap_rank: Option<u32>,
 }
 
 #[derive(Deserialize, Debug)]
@@ -77,7 +77,7 @@ impl Aggregator for Coingecko {
                 let coin = result
                     .coins
                     .iter()
-                    .min_by_key(|i| i.market_cap_rank)
+                    .min_by_key(|i| i.market_cap_rank.unwrap_or(u32::MAX))
                     .unwrap();
                 let community = HTTP_CLIENT
                     .get(format!(
