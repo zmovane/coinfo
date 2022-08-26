@@ -1,6 +1,6 @@
 use aggregators::{Coingecko, CommunityInfo};
 use clap::Parser;
-use command::Commands;
+use command::{Commands, DEFAULT_EXCHANGE};
 use display::{display_community_info, display_tickers};
 use exchanges::{Binance, Exchange, SymbolFormatter, Ticker, OKX};
 use std::error::Error;
@@ -12,9 +12,13 @@ mod exchanges;
 fn main() {
     let args = command::Cli::parse();
     match args.command {
-        Commands::Ticker { currencies } => {
-            let currencies: Vec<&str> = currencies.split(",").map(|i| i.trim()).collect();
-            match get_tickers(OKX, currencies) {
+        Commands::Ticker(ticker) => {
+            let currencies: Vec<&str> = ticker.currencies.split(",").map(|i| i.trim()).collect();
+            let ex_arg = ticker
+                .exchange
+                .unwrap_or(DEFAULT_EXCHANGE.to_string())
+                .to_lowercase();
+            match get_tickers_by_exchange(ex_arg, currencies) {
                 Ok(data) => {
                     display_tickers(data);
                 }
@@ -27,6 +31,16 @@ fn main() {
             }
             Err(e) => eprintln!("{}", e),
         },
+    }
+}
+
+fn get_tickers_by_exchange(
+    ex_arg: String,
+    currencies: Vec<&str>,
+) -> Result<Vec<Ticker>, Box<dyn Error>> {
+    match ex_arg.as_str() {
+        "okx" => get_tickers(OKX, currencies),
+        _ => get_tickers(Binance, currencies),
     }
 }
 

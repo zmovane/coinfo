@@ -21,7 +21,6 @@ pub trait Exchange {
 pub trait SymbolFormatter {
     fn format_symbol(&self, base: String) -> String;
 }
-
 pub static QUOTE: Lazy<String> =
     Lazy::new(|| env::var("COINFO_QUOTE").unwrap_or(String::from("USDT")));
 
