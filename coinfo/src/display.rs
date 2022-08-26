@@ -1,4 +1,7 @@
-use crate::exchanges::{Instrument, QUOTE};
+use crate::{
+    aggregators::CommunityInfo,
+    exchanges::{Instrument, QUOTE},
+};
 use prettytable::{row, Table};
 
 pub fn display_instruments(instruments: Vec<Instrument>) {
@@ -19,5 +22,32 @@ pub fn display_instruments(instruments: Vec<Instrument>) {
             instr.volume
         ]);
     }
+    table.printstd();
+}
+
+pub fn display_community_info(info: CommunityInfo) {
+    let mut table = Table::new();
+    table.set_titles(row![
+        "Currency",
+        "Homepage",
+        "Explorer",
+        "Opensource",
+        "Description"
+    ]);
+    let readmore = format!("https://www.coingecko.com/en/coins/{}", info.id);
+    let description = info
+        .description
+        .split(" ")
+        .take(50)
+        .collect::<Vec<&str>>()
+        .join(" ");
+
+    table.add_row(row![
+        info.symbol,
+        info.homepage.join("\n"),
+        info.explorer.join("\n"),
+        info.opensource.join("\n"),
+        format!("{}\nRead more on {}", description, readmore)
+    ]);
     table.printstd();
 }

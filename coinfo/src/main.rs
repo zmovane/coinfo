@@ -1,8 +1,10 @@
+use aggregators::{Coingecko, CommunityInfo};
 use clap::Parser;
 use command::Commands;
-use display::display_instruments;
+use display::{display_community_info, display_instruments};
 use exchanges::{Binance, Exchange, Instrument, SymbolFormatter};
 use std::error::Error;
+mod aggregators;
 mod command;
 mod display;
 mod exchanges;
@@ -19,7 +21,20 @@ fn main() {
                 Err(e) => eprintln!("{}", e),
             }
         }
+        Commands::Info { currency } => match get_community_info(Coingecko, currency) {
+            Ok(data) => {
+                display_community_info(data);
+            }
+            Err(e) => eprintln!("{}", e),
+        },
     }
+}
+
+fn get_community_info<T: aggregators::Aggregator>(
+    aggregator: T,
+    currency: String,
+) -> Result<CommunityInfo, Box<dyn Error>> {
+    aggregator.get_community_info(currency)
 }
 
 fn get_instruments<T: Exchange + SymbolFormatter>(
