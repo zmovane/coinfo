@@ -11,9 +11,6 @@ struct SearchResult {
 #[derive(Deserialize, Debug)]
 struct Coin {
     id: String,
-    name: String,
-    api_symbol: String,
-    symbol: String,
     market_cap_rank: Option<u32>,
 }
 
@@ -66,13 +63,13 @@ impl Aggregator for Coingecko {
         &self,
         currency: String,
     ) -> Result<CommunityInfo, Box<dyn std::error::Error>> {
-        let searchResult = HTTP_CLIENT
+        let search_result = HTTP_CLIENT
             .get("https://api.coingecko.com/api/v3/search")
             .query(&[("query", currency)])
             .send()?
             .json::<SearchResult>();
 
-        match searchResult {
+        match search_result {
             Ok(result) => {
                 let coin = result
                     .coins

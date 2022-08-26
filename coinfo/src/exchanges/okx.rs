@@ -4,30 +4,16 @@ use serde::Deserialize;
 #[derive(Deserialize, Debug)]
 #[serde(rename_all = "camelCase")]
 struct Response<T> {
-    code: String,
-    msg: String,
     data: Vec<T>,
 }
 
 #[derive(Deserialize, Debug)]
 #[serde(rename_all = "camelCase")]
 struct Ticker {
-    inst_type: String,
     inst_id: String,
     last: String,
-    last_sz: String,
-    ask_px: String,
-    ask_sz: String,
-    bid_px: String,
-    bid_sz: String,
     open24h: String,
-    high24h: String,
-    low24h: String,
     vol_ccy24h: String,
-    vol24h: String,
-    ts: String,
-    sod_utc0: String,
-    sod_utc8: String,
 }
 
 impl Ticker {
