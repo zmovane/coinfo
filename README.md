@@ -46,6 +46,20 @@ $ coinfo community btc
 +----------+------------------------+---------------------------------+------------------------------------+------------------------------------------------+
 ```
 
+### List airdrops
+
+```
+$ coinfo airdrop --status ongoing
+
++---------------------------------------+----------+--------------+-------------------+----------------------+---------------------+---------------------+--------------------------------------+
+| Ongoing Project                       | Currency | Participated | Number of winners | Total airdrop amount | Start date (UTC)    | End date (UTC)      | Link                                 |
++===============================================================================================================================================================================================+
+| SENSO Token $75 000 Airdrop Campaign  | SENSO    | 80940        | 2000              | 384498               | 2022-08-10 16:00:00 | 2022-08-30 16:00:00 | https://coinmarketcap.com/currencies |
+|                                       |          |              |                   |                      |                     |                     | /senso/airdrop/                      |
++---------------------------------------+----------+--------------+-------------------+----------------------+---------------------+---------------------+--------------------------------------+
+
+```
+
 ### Help
 
 ```
@@ -73,8 +87,17 @@ ARGS:
 OPTIONS:
     -e, --exchange <EXCHANGE>
     -h, --help                   Print help information
+
+$ coinfo airdrop --help
+
+USAGE:
+    coinfo airdrop [OPTIONS]
+
+OPTIONS:
+    -h, --help               Print help information
+    -s, --status <STATUS>    [possible values: ongoing, upcoming, ended]
 ```
 
 ## TODO
 
-- [ ] Airdrops Information
+- [ x ] Airdrops Information
