@@ -100,4 +100,4 @@ OPTIONS:
 
 ## TODO
 
-- [ x ] Airdrops Information
+- [x] Airdrops Information
