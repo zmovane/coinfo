@@ -24,8 +24,8 @@ pub struct AirdropInfo {
     pub participated: String,
     pub number_of_winners: u32,
     pub total_airdrop_amount: String,
-    pub start_date: u64,
-    pub end_date: u64,
+    pub start_date: i64,
+    pub end_date: i64,
 }
 
 // https://coinmarketcap.com/airdrop/ongoing/

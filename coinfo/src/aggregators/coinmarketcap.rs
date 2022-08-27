@@ -17,8 +17,8 @@ struct AirdropResponse {
 #[serde(rename_all = "camelCase")]
 struct Airdrop {
     project_name: String,
-    start_date: u64,
-    end_date: u64,
+    start_date: i64,
+    end_date: i64,
     crypto_currency: CryptoCurrency,
     participation_count: String,
     winner_count: u32,
