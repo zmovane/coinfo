@@ -95,4 +95,8 @@ impl Aggregator for Coingecko {
             Err(e) => Err(e.into()),
         }
     }
+
+    fn get_airdrops(&self, _status: String) -> Result<Vec<AirdropInfo>, Box<dyn Error>> {
+        todo!()
+    }
 }

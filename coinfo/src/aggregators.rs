@@ -2,7 +2,9 @@ use std::{collections::HashMap, error::Error};
 
 use serde::Deserialize;
 mod coingecko;
+mod coinmarketcap;
 pub use coingecko::Coingecko;
+pub use coinmarketcap::Coinmarketcap;
 
 #[derive(Deserialize)]
 pub struct CommunityInfo {
@@ -15,6 +17,20 @@ pub struct CommunityInfo {
     pub opensource: Vec<String>,
 }
 
+#[derive(Deserialize)]
+pub struct AirdropInfo {
+    pub project_name: String,
+    pub symbol: String,
+    pub participated: String,
+    pub number_of_winners: u32,
+    pub total_airdrop_amount: String,
+    pub start_date: u64,
+    pub end_date: u64,
+}
+
+// https://coinmarketcap.com/airdrop/ongoing/
+
 pub trait Aggregator {
     fn get_community_info(&self, currency: String) -> Result<CommunityInfo, Box<dyn Error>>;
+    fn get_airdrops(&self, status: String) -> Result<Vec<AirdropInfo>, Box<dyn Error>>;
 }

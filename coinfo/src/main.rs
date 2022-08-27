@@ -1,7 +1,7 @@
-use aggregators::{Coingecko, CommunityInfo};
+use aggregators::{AirdropInfo, Coingecko, Coinmarketcap, CommunityInfo};
 use clap::Parser;
 use command::{Commands, DEFAULT_EXCHANGE};
-use display::{display_community_info, display_tickers};
+use display::{display_airdrops, display_community_info, display_tickers};
 use exchanges::{Binance, Exchange, SymbolFormatter, Ticker, OKX};
 use std::error::Error;
 mod aggregators;
@@ -31,6 +31,15 @@ fn main() {
             }
             Err(e) => eprintln!("{}", e),
         },
+        Commands::Airdrop(airdrop) => {
+            let status = airdrop.status.unwrap_or(command::Status::Ongoing);
+            match get_airdrops(Coinmarketcap, status.to_string()) {
+                Ok(data) => {
+                    display_airdrops(data);
+                }
+                Err(e) => eprintln!("{}", e),
+            }
+        }
     }
 }
 
@@ -49,6 +58,13 @@ fn get_community_info<T: aggregators::Aggregator>(
     currency: String,
 ) -> Result<CommunityInfo, Box<dyn Error>> {
     aggregator.get_community_info(currency)
+}
+
+fn get_airdrops<T: aggregators::Aggregator>(
+    aggregator: T,
+    status: String,
+) -> Result<Vec<AirdropInfo>, Box<dyn Error>> {
+    aggregator.get_airdrops(status)
 }
 
 fn get_tickers<T: Exchange + SymbolFormatter>(
