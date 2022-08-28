@@ -11,7 +11,7 @@ pub fn get_community_info<T: aggregators::Aggregator>(
     aggregator.get_community_info(currency)
 }
 
-pub fn handle_community_info(community_arg: String) {
+pub fn handle_community(community_arg: String) {
     match get_community_info(Coingecko, community_arg) {
         Ok(data) => {
             display_community_info(data);

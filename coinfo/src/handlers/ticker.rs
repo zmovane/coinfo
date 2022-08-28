@@ -26,7 +26,7 @@ pub fn get_tickers<T: Exchange + SymbolFormatter>(
     ex.get_tickers(symbols)
 }
 
-pub fn handle_command_ticker(ticker_arg: TickerArg) {
+pub fn handle_ticker(ticker_arg: TickerArg) {
     let currencies: Vec<&str> = ticker_arg.currencies.split(",").map(|i| i.trim()).collect();
     let ex_arg = ticker_arg
         .exchange
