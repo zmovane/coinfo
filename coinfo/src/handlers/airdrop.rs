@@ -12,7 +12,7 @@ pub fn get_airdrops<T: aggregators::Aggregator>(
     aggregator.get_airdrops(status)
 }
 
-pub fn handle_aridrop(airdrop_arg: AirdropArg) {
+pub fn handle_airdrop(airdrop_arg: AirdropArg) {
     let status = airdrop_arg.status.unwrap_or(commands::Status::Ongoing);
     match get_airdrops(Coinmarketcap, status.to_string()) {
         Ok(data) => {
