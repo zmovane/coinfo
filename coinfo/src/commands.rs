@@ -1,5 +1,4 @@
 use clap::{Args, Parser, Subcommand, ValueEnum};
-use once_cell::sync::Lazy;
 use std::fmt;
 
 #[derive(Debug, Parser)]
@@ -46,5 +45,3 @@ impl fmt::Display for Status {
         write!(f, "{:?}", self)
     }
 }
-
-pub static DEFAULT_EXCHANGE: Lazy<String> = Lazy::new(|| String::from("Binance"));

@@ -2,7 +2,7 @@ use crate::{
     aggregators::{AirdropInfo, CommunityInfo},
     exchanges::{Ticker, QUOTE},
 };
-use chrono::{ NaiveDateTime };
+use chrono::NaiveDateTime;
 use comfy_table::{ContentArrangement, Table};
 
 pub fn display_tickers(tickers: Vec<Ticker>) {

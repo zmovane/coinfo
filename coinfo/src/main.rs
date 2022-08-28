@@ -1,79 +1,17 @@
-use aggregators::{AirdropInfo, Coingecko, Coinmarketcap, CommunityInfo};
 use clap::Parser;
-use command::{Commands, DEFAULT_EXCHANGE};
-use display::{display_airdrops, display_community_info, display_tickers};
-use exchanges::{Binance, Exchange, SymbolFormatter, Ticker, OKX};
-use std::error::Error;
+use commands::Commands;
+use handlers::{handle_aridrop, handle_command_ticker, handle_community_info};
 mod aggregators;
-mod command;
+mod commands;
 mod display;
 mod exchanges;
+mod handlers;
 
 fn main() {
-    let args = command::Cli::parse();
+    let args = commands::Cli::parse();
     match args.command {
-        Commands::Ticker(ticker) => {
-            let currencies: Vec<&str> = ticker.currencies.split(",").map(|i| i.trim()).collect();
-            let ex_arg = ticker
-                .exchange
-                .unwrap_or(DEFAULT_EXCHANGE.to_string())
-                .to_lowercase();
-            match get_tickers_by_exchange(ex_arg, currencies) {
-                Ok(data) => {
-                    display_tickers(data);
-                }
-                Err(e) => eprintln!("{}", e),
-            }
-        }
-        Commands::Community { currency } => match get_community_info(Coingecko, currency) {
-            Ok(data) => {
-                display_community_info(data);
-            }
-            Err(e) => eprintln!("{}", e),
-        },
-        Commands::Airdrop(airdrop) => {
-            let status = airdrop.status.unwrap_or(command::Status::Ongoing);
-            match get_airdrops(Coinmarketcap, status.to_string()) {
-                Ok(data) => {
-                    display_airdrops(data);
-                }
-                Err(e) => eprintln!("{}", e),
-            }
-        }
+        Commands::Ticker(ticker_arg) => handle_command_ticker(ticker_arg),
+        Commands::Community { currency } => handle_community_info(currency),
+        Commands::Airdrop(airdrop_arg) => handle_aridrop(airdrop_arg),
     }
-}
-
-fn get_tickers_by_exchange(
-    ex_arg: String,
-    currencies: Vec<&str>,
-) -> Result<Vec<Ticker>, Box<dyn Error>> {
-    match ex_arg.as_str() {
-        "okx" => get_tickers(OKX, currencies),
-        _ => get_tickers(Binance, currencies),
-    }
-}
-
-fn get_community_info<T: aggregators::Aggregator>(
-    aggregator: T,
-    currency: String,
-) -> Result<CommunityInfo, Box<dyn Error>> {
-    aggregator.get_community_info(currency)
-}
-
-fn get_airdrops<T: aggregators::Aggregator>(
-    aggregator: T,
-    status: String,
-) -> Result<Vec<AirdropInfo>, Box<dyn Error>> {
-    aggregator.get_airdrops(status)
-}
-
-fn get_tickers<T: Exchange + SymbolFormatter>(
-    ex: T,
-    currencies: Vec<&str>,
-) -> Result<Vec<Ticker>, Box<dyn Error>> {
-    let symbols: Vec<String> = currencies
-        .iter()
-        .map(|&i| ex.format_symbol(i.to_string()))
-        .collect();
-    ex.get_tickers(symbols)
 }
