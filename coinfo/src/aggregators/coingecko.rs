@@ -67,33 +67,27 @@ impl Aggregator for Coingecko {
             .get("https://api.coingecko.com/api/v3/search")
             .query(&[("query", currency)])
             .send()?
-            .json::<SearchResult>();
-
-        match search_result {
-            Ok(result) => {
-                let coin = result
-                    .coins
-                    .iter()
-                    .min_by_key(|i| i.market_cap_rank.unwrap_or(u32::MAX))
-                    .unwrap();
-                let community = HTTP_CLIENT
-                    .get(format!(
-                        "https://api.coingecko.com/api/v3/coins/{}",
-                        coin.id
-                    ))
-                    .query(&[
-                        ("tickers", false),
-                        ("market_data", false),
-                        ("community_data", true),
-                        ("developer_data", false),
-                        ("sparkline", false),
-                    ])
-                    .send()?
-                    .json::<Community>()?;
-                Ok(community.as_community_info())
-            }
-            Err(e) => Err(e.into()),
-        }
+            .json::<SearchResult>()?;
+        let coin = search_result
+            .coins
+            .iter()
+            .min_by_key(|i| i.market_cap_rank.unwrap_or(u32::MAX))
+            .unwrap();
+        let community = HTTP_CLIENT
+            .get(format!(
+                "https://api.coingecko.com/api/v3/coins/{}",
+                coin.id
+            ))
+            .query(&[
+                ("tickers", false),
+                ("market_data", false),
+                ("community_data", true),
+                ("developer_data", false),
+                ("sparkline", false),
+            ])
+            .send()?
+            .json::<Community>()?;
+        Ok(community.as_community_info())
     }
 
     fn get_airdrops(&self, _status: String) -> Result<Vec<AirdropInfo>, Box<dyn Error>> {
