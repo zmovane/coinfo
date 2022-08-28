@@ -26,7 +26,7 @@ pub struct Binance;
 
 impl SymbolFormatter for Binance {
     fn format_symbol(&self, base: String) -> String {
-        format!("{}{}", base, QUOTE.to_string())
+        format!("{}{}", base, QUOTE.to_string()).to_uppercase()
     }
 }
 
